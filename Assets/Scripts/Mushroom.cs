@@ -2,7 +2,6 @@
 
 public class Mushroom : MonoBehaviour
 {
-
     [SerializeField] float _bounceVelocity = 10;
     void OnCollisionEnter2D(Collision2D collision)
     {
