@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, _jumpVelocity);
             _jumpsRemaining--;
+            Debug.Log($"Jumps remaining {_jumpsRemaining}");
             _fallTimer = 0;
             _jumpTimer = 0;
         }
@@ -57,10 +58,10 @@ public class Player : MonoBehaviour
         {
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, _jumpVelocity);
             _fallTimer = 0;
-            _jumpTimer += Time.deltaTime;
         }
+        _jumpTimer += Time.deltaTime;
 
-        if (isGrounded)
+        if (isGrounded && _fallTimer > 0)
         {
             _fallTimer = 0;
             _jumpsRemaining = _maxJumps;
