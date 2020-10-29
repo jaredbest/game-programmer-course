@@ -1596,10 +1596,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e584f43a79a881e48bca3650adef3df4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
-  _jumpForce: 400
+  _speed: 5
+  _jumpVelocity: 10
   _maxJumps: 2
   _feet: {fileID: 1305365346}
+  _downPull: 0.1
 --- !u!95 &1821332061
 Animator:
   serializedVersion: 3
