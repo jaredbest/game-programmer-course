@@ -116,7 +116,6 @@ public class Player : MonoBehaviour
     {
         if (_horizontal != 0)
         {
-            Debug.Log("Moving Right");
             _spriteRenderer.flipX = _horizontal < 0;
         }
     }

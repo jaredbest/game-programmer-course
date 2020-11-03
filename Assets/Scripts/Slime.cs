@@ -22,19 +22,9 @@ public class Slime : MonoBehaviour
         _rigidbody2D.velocity = new Vector2(_direction, _rigidbody2D.velocity.y);
         
         if(_direction < 0)
-        {
-            Debug.DrawRay(_leftSensor.position, Vector2.down * 0.1f, Color.red);
-            var result = Physics2D.Raycast(_leftSensor.position, Vector2.down, 0.1f);
-            if (result.collider == null)
-                TurnAround();
-        }
+            ScanSensor(_leftSensor);
         else
-        {
-            Debug.DrawRay(_rightSensor.position, Vector2.down * 0.1f, Color.red);
-            var result = Physics2D.Raycast(_rightSensor.position, Vector2.down, 0.1f);
-            if (result.collider == null)
-                TurnAround();
-        }
+            ScanSensor(_rightSensor);
     }
 
     void TurnAround()
@@ -49,6 +39,33 @@ public class Slime : MonoBehaviour
         if (player == null)
             return;
 
-        player.ResetToStart();
+        var contact = collision.contacts[0];
+        Vector2 normal = contact.normal;
+        Debug.Log($"Normal = {normal}");
+
+        if (normal.y <= -0.5)
+            Die();
+        else
+            player.ResetToStart();
+    }
+
+    void ScanSensor(Transform sensor)
+    {
+        Debug.DrawRay(sensor.position, Vector2.down * 0.1f, Color.red);
+        
+        var result = Physics2D.Raycast(sensor.position, Vector2.down, 0.1f);
+        if (result.collider == null)
+            TurnAround();
+
+        Debug.DrawRay(sensor.position, new Vector2(_direction, 0) * 0.1f, Color.red);
+
+        var sideResult = Physics2D.Raycast(sensor.position, new Vector2(_direction, 0), 0.1f);
+        if (sideResult.collider != null)
+            TurnAround();
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 }
