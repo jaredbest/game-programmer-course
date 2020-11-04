@@ -6,6 +6,7 @@ public class Slime : MonoBehaviour
 {
     [SerializeField] Transform _leftSensor;
     [SerializeField] Transform _rightSensor;
+    [SerializeField] Sprite _deadSprite;
 
     Rigidbody2D _rigidbody2D;
     float _direction = -1;
@@ -20,8 +21,8 @@ public class Slime : MonoBehaviour
     void Update()
     {
         _rigidbody2D.velocity = new Vector2(_direction, _rigidbody2D.velocity.y);
-        
-        if(_direction < 0)
+
+        if (_direction < 0)
             ScanSensor(_leftSensor);
         else
             ScanSensor(_rightSensor);
@@ -34,7 +35,8 @@ public class Slime : MonoBehaviour
         spriteRenderer.flipX = _direction > 0;
     }
 
-    void OnCollisionEnter2D(Collision2D collision) {
+    void OnCollisionEnter2D(Collision2D collision)
+    {
         var player = collision.collider.GetComponent<Player>();
         if (player == null)
             return;
@@ -44,7 +46,7 @@ public class Slime : MonoBehaviour
         Debug.Log($"Normal = {normal}");
 
         if (normal.y <= -0.5)
-            Die();
+            StartCoroutine(Die());
         else
             player.ResetToStart();
     }
@@ -52,7 +54,7 @@ public class Slime : MonoBehaviour
     void ScanSensor(Transform sensor)
     {
         Debug.DrawRay(sensor.position, Vector2.down * 0.1f, Color.red);
-        
+
         var result = Physics2D.Raycast(sensor.position, Vector2.down, 0.1f);
         if (result.collider == null)
             TurnAround();
@@ -64,8 +66,23 @@ public class Slime : MonoBehaviour
             TurnAround();
     }
 
-    void Die()
+    IEnumerator Die()
     {
-        Destroy(gameObject);
+        var spriteRenderer = GetComponent<SpriteRenderer>();
+
+        spriteRenderer.sprite = _deadSprite;
+        GetComponent<Animator>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+        enabled = false;
+        GetComponent<Rigidbody2D>().simulated = false;
+
+        float alpha = 1;
+
+        while (alpha > 0)
+        {
+            yield return null;
+            alpha -= Time.deltaTime;
+            spriteRenderer.color = new Color(1, 1, 1, alpha);
+        }
     }
 }

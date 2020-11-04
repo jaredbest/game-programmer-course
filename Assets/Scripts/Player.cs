@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] int _playerNumber = 1;
     [Header("Movement")]
     [SerializeField] float _speed = 1;
     [SerializeField] float _slipFactor = 1;
@@ -24,6 +25,8 @@ public class Player : MonoBehaviour
     float _horizontal;
     bool _isGrounded;
     bool _isOnSlipperySurface;
+
+    public int PlayerNumber => _playerNumber;
 
     void Start()
     {
@@ -75,7 +78,7 @@ public class Player : MonoBehaviour
 
     bool ShouldContinueJump()
     {
-        return Input.GetButton("Fire1") && _jumpTimer <= _maxJumpDuration;
+        return Input.GetButton($"P{_playerNumber}Jump") && _jumpTimer <= _maxJumpDuration;
     }
 
     void Jump()
@@ -89,7 +92,7 @@ public class Player : MonoBehaviour
 
     bool ShouldStartJump()
     {
-        return Input.GetButtonDown("Fire1") && _jumpsRemaining > 0;
+        return Input.GetButtonDown($"P{_playerNumber}Jump") && _jumpsRemaining > 0;
     }
 
     void MoveHorizontal()
@@ -109,7 +112,7 @@ public class Player : MonoBehaviour
 
     void ReadHorizontalInput()
     {
-        _horizontal = Input.GetAxis("Horizontal") * _speed;
+        _horizontal = Input.GetAxis($"P{_playerNumber}Horizontal") * _speed;
     }
 
     void UpdateSpriteDirection()
@@ -124,6 +127,7 @@ public class Player : MonoBehaviour
     {
         bool walking = _horizontal != 0;
         _animator.SetBool("isWalking", walking);
+        _animator.SetBool("isJumping", ShouldContinueJump());
     }
 
     void UpdateIsGrounded()
@@ -139,6 +143,12 @@ public class Player : MonoBehaviour
 
     internal void ResetToStart()
     {
-        transform.position = _startPosition;
+        _rigidbody2D.position = _startPosition;
+    }
+
+    internal void TeleportTo(Vector3 position)
+    {
+        _rigidbody2D.position = position;
+        _rigidbody2D.velocity = Vector2.zero;
     }
 }
