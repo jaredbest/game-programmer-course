@@ -2,4 +2,5 @@
 
 - **Title:** Game Programmer Course
 - **Taught by:** Jason Weimann
-- **Website:** https://game.courses/programmer/
+- **Platform:** game.courses
+- **Note(s):**
