@@ -1,6 +1,6 @@
 # Course Repo
 
 - **Title:** Game Programmer Course
-- **Taught by:** Jason Weimann
+- **Instructor:** Jason Weimann
 - **Platform:** game.courses
 - **Note(s):**
